@@ -1,41 +1,87 @@
-function openEnv(){
-  const flap=document.getElementById('topFlap');
-  if(flap)flap.style.transform='rotateX(180deg)';
-  setTimeout(()=>{
-    document.getElementById('envelopeScene').style.display='none';
-    document.getElementById('cardScene').style.display='flex';
-    window.scrollTo(0,0);
-  },650);
+const FORM = {
+  url: 'https://docs.google.com/forms/d/e/1FAIpQLSdlxZuThkPHJhaAO8ZQf0bejq_VZd6GTiw_jdKNKGyl0HPM4g/formResponse',
+  fields: {
+    name:   'entry.1357166799',
+    attend: 'entry.1167612043',
+    msg:    'entry.1741352301',
+  },
+  values: { yes: '我會到！', no: '線上祝福' },
+};
+const ERROR_RESET_MS = 1500;
+
+let rsvpSubmitted = false;
+
+function openEnv() {
+  const flap = document.getElementById('topFlap');
+  let swapped = false;
+
+  function swapScenes() {
+    if (swapped) return;
+    swapped = true;
+    document.getElementById('envelopeScene').style.display = 'none';
+    document.getElementById('cardScene').style.display = 'flex';
+    window.scrollTo(0, 0);
+  }
+
+  flap.addEventListener('transitionend', swapScenes, {once: true});
+  flap.style.transform = 'rotateX(180deg)';
+  setTimeout(swapScenes, 700);
 }
-function doRSVP(){
-  const name=document.getElementById('guestName').value.trim();
-  const sel=document.querySelector('input[name="attend"]:checked');
-  if(!name){
-    const el=document.getElementById('guestName');
-    el.style.borderColor='#e8659a';el.focus();
-    setTimeout(()=>el.style.borderColor='',1500);return;
-  }
-  if(!sel){
-    const ag=document.querySelector('.attend-grid');
-    ag.style.outline='3px solid #e8659a';
-    setTimeout(()=>ag.style.outline='',1500);return;
-  }
-  const msg=document.getElementById('guestMsg').value.trim();
-  const yes=sel.value==='yes';
-  const attendVal=yes?'我會到！':'線上祝福';
 
-  const base='https://docs.google.com/forms/d/e/1FAIpQLSdlxZuThkPHJhaAO8ZQf0bejq_VZd6GTiw_jdKNKGyl0HPM4g/formResponse';
-  const body=new URLSearchParams();
-  body.set('entry.1357166799', name);
-  body.set('entry.1167612043', attendVal);
-  if(msg) body.set('entry.1741352301', msg);
-  fetch(base,{method:'POST',mode:'no-cors',body});
+function validateForm() {
+  const nameEl = document.getElementById('guestName');
+  const name = nameEl.value.trim().slice(0, 40);
+  if (!name) {
+    nameEl.classList.add('inp--error');
+    nameEl.setAttribute('aria-invalid', 'true');
+    nameEl.focus();
+    setTimeout(() => {
+      nameEl.classList.remove('inp--error');
+      nameEl.removeAttribute('aria-invalid');
+    }, ERROR_RESET_MS);
+    return null;
+  }
 
-  document.getElementById('rsvpForm').style.display='none';
-  document.getElementById('successBox').style.display='block';
-  document.getElementById('sTitle').textContent=yes?`${name}，我們等你！`:`${name} 的回覆收到了`;
-  document.getElementById('sText').textContent=yes
-    ?`太好了！期待 5/20 與你相見，一起見證這個時刻。${msg?'\n\n「'+msg+'」':''}`
-    :`謝謝你的回覆！雖然這次無法到場，心意我們都收到了。${msg?'\n\n「'+msg+'」':''}`;
-  setTimeout(()=>document.getElementById('expFill').style.width='100%',300);
+  const sel = document.querySelector('input[name="attend"]:checked');
+  if (!sel) {
+    const ag = document.querySelector('.attend-grid');
+    ag.classList.add('attend-grid--error');
+    setTimeout(() => ag.classList.remove('attend-grid--error'), ERROR_RESET_MS);
+    return null;
+  }
+
+  const msg = document.getElementById('guestMsg').value.trim().slice(0, 500);
+  const yes = sel.value === 'yes';
+  return { name, yes, attendVal: yes ? FORM.values.yes : FORM.values.no, msg };
+}
+
+function showSuccess({ name, yes, msg }) {
+  document.getElementById('rsvpForm').style.display = 'none';
+  document.getElementById('successBox').style.display = 'block';
+  document.getElementById('sTitle').textContent = yes
+    ? `${name}，我們等你！`
+    : `${name} 的回覆收到了`;
+  document.getElementById('sText').textContent = yes
+    ? `太好了！期待 5/20 與你相見，一起見證這個時刻。${msg ? '\n\n「' + msg + '」' : ''}`
+    : `謝謝你的回覆！雖然這次無法到場，心意我們都收到了。${msg ? '\n\n「' + msg + '」' : ''}`;
+  setTimeout(() => { document.getElementById('expFill').style.width = '100%'; }, 300);
+}
+
+function doRSVP() {
+  if (rsvpSubmitted) return;
+  const data = validateForm();
+  if (!data) return;
+  rsvpSubmitted = true;
+
+  const body = new URLSearchParams();
+  body.set(FORM.fields.name, data.name);
+  body.set(FORM.fields.attend, data.attendVal);
+  if (data.msg) body.set(FORM.fields.msg, data.msg);
+
+  fetch(FORM.url, {method: 'POST', mode: 'no-cors', body})
+    .then(() => showSuccess(data))
+    .catch(() => {
+      rsvpSubmitted = false;
+      alert('網路連線有問題，請再試一次');
+    });
 }

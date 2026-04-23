@@ -97,6 +97,8 @@ body::after{content:'';position:fixed;bottom:0;left:0;right:0;height:56px;backgr
 .form-lbl{font-size:12px;color:var(--pink-deep);letter-spacing:1px;font-family:'DotGothic16','Noto Sans TC',sans-serif;}
 .form-inp{background:white;border:3px solid var(--dark);box-shadow:2px 2px 0 var(--dark);color:var(--dark);font-family:'Noto Sans TC',sans-serif;font-size:clamp(14px,4vw,16px);padding:10px 12px;outline:none;width:100%;transition:border-color .15s;-webkit-appearance:none;border-radius:0;}
 .form-inp:focus{border-color:var(--pink-deep);}
+.form-inp.inp--error{border-color:var(--pink-deep);}
+.attend-grid.attend-grid--error{outline:3px solid var(--pink-deep);}
 .attend-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
 .attend-opt{display:none;}
 .attend-lbl{display:block;background:white;border:3px solid var(--dark);box-shadow:2px 2px 0 var(--dark);padding:12px 8px;text-align:center;cursor:pointer;transition:all .15s;}
