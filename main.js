@@ -100,7 +100,7 @@ function _runGame() {
   const GAME_FRAMES = 30 * 60; // 30-second game
 
   // ── player: pixel bride
-  const player = { x: W / 2 - T * 2, y: H - T * 6, w: T * 4, h: T * 5, spd: 5 };
+  const player = { x: W / 2 - T * 2, y: H - T * 6, w: T * 4, h: T * 5, spd: 4 };
 
   // ── bouquet factory — speed ramps up with score and time
   function newBouquet(score, frame) {
@@ -108,7 +108,7 @@ function _runGame() {
       x: T + Math.random() * (W - T * 5),
       y: -T * 3,
       w: T * 3, h: T * 3,
-      vy: 2 + score * 0.25 + (frame / GAME_FRAMES) * 3
+      vy: 3 + score * 0.4 + (frame / GAME_FRAMES) * 5
     };
   }
 
