@@ -108,7 +108,7 @@ function _runGame() {
       x: T + Math.random() * (W - T * 5),
       y: -T * 3,
       w: T * 3, h: T * 3,
-      vy: 3 + score * 0.4 + (frame / GAME_FRAMES) * 5
+      vy: 2 + score * 0.35 + (frame / GAME_FRAMES) * 4
     };
   }
 
