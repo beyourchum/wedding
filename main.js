@@ -248,10 +248,10 @@ function _runGame() {
 
   // ── score/rank helper
   function scoreRank(n) {
-    if (n >= 15) return { rank: 'S', title: '新人御用接球手', color: '#ffe566', msg: '花球全數接住！幸福滿分！' };
-    if (n >= 10) return { rank: 'A', title: '首席伴娘認可',   color: '#a8f0a8', msg: '婚禮達人！新人超感謝！' };
-    if (n >= 6)  return { rank: 'B', title: '婚禮嘉賓等級',   color: '#f9a8c9', msg: '接得不錯！幸福有接到！' };
-    if (n >= 3)  return { rank: 'C', title: '花童加油',       color: '#a8d8f0', msg: '再練練，下次接給新人看！' };
+    if (n >= 30) return { rank: 'S', title: '新人御用接球手', color: '#ffe566', msg: '花球全數接住！幸福滿分！' };
+    if (n >= 25) return { rank: 'A', title: '首席伴娘認可',   color: '#a8f0a8', msg: '婚禮達人！新人超感謝！' };
+    if (n >= 20)  return { rank: 'B', title: '婚禮嘉賓等級',   color: '#f9a8c9', msg: '接得不錯！幸福有接到！' };
+    if (n >= 15)  return { rank: 'C', title: '花童加油',       color: '#a8d8f0', msg: '再練練，下次接給新人看！' };
     return             { rank: 'D', title: '遲到賓客',        color: '#888',    msg: '花球跑掉了，趕快追！' };
   }
 
