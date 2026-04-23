@@ -353,7 +353,7 @@ function doRSVP(){
   // 顯示成功畫面
   document.getElementById('rsvpForm').style.display='none';
   document.getElementById('successBox').style.display='block';
-  document.getElementById('sTitle').textContent=yes?`${name}，我們等你！`:`${name} 的回覆收到了`;
+  document.getElementById('sTitle').textContent=yes?`${name}，我們等你！（跳轉至表單請按送出）`:`${name} 的回覆收到了（跳轉至表單請按送出）`;
   document.getElementById('sText').textContent=yes
     ?`太好了！期待 5/20 與你相見，一起見證這個時刻。${msg?'\n\n「'+msg+'」':''}`
     :`謝謝你的回覆！雖然這次無法到場，心意我們都收到了。${msg?'\n\n「'+msg+'」':''}`;
